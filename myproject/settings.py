@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k&)degcx)w!%s$&*36gow)(l)ur@(+oukt@ruxe&82a%v6l*_c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['TaskFlow.railway.app', '127.0.0.1']
+ALLOWED_HOSTS = ['*','TaskFlow.railway.app', '127.0.0.1']
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
