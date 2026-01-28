@@ -1,0 +1,75 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="mb-8 flex justify-between items-end">
+    <div>
+        <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">My Workspace</h1>
+        <p class="text-slate-500 mt-2 font-medium">Manage your daily focus and productivity.</p>
+    </div>
+    <div class="text-right">
+        <span class="text-3xl font-black text-indigo-600">{{ count }}</span>
+        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Tasks Left</p>
+    </div>
+</div>
+
+<!-- Add Task Form -->
+<div class="glass p-1 rounded-2xl shadow-xl mb-10 overflow-hidden">
+    <form method="POST" class="flex items-center">
+        {% csrf_token %}
+        <input type="text" name="title"
+            class="w-full bg-transparent border-none px-6 py-4 focus:ring-0 text-lg outline-none"
+            placeholder="What's your next priority?" required>
+        <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:scale-105 mr-2">
+            Add
+        </button>
+    </form>
+</div>
+
+<!-- Task List -->
+<div class="space-y-4">
+    {% for task in tasks %}
+    <div class="flex flex-col">
+        <span
+            class="text-lg font-medium {% if task.completed %}text-slate-400 line-through{% else %}text-slate-700{% endif %}">
+            {{ task.title }}
+        </span>
+        {% if task.due_date %}
+        <span
+            class="text-[10px] font-bold uppercase tracking-wider {% if task.completed %}text-slate-300{% else %}text-indigo-400{% endif %}">
+            Due: {{ task.due_date|date:"M d, Y" }}
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        {% if not task.completed %}
+        <a href="{% url 'complete_task' task.id %}"
+            class="p-2 hover:bg-emerald-50 text-emerald-500 rounded-lg transition-colors">
+            Done
+        </a>
+        {% endif %}
+        <a href="{% url 'delete_task' task.id %}" class="p-2 hover:bg-red-50 text-red-400 rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </a>
+    </div>
+</div>
+{% empty %}
+<div class="text-center py-20">
+    <div class="text-slate-300 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+    </div>
+    <p class="text-slate-400 font-medium italic">Your workspace is clean. Take a break!</p>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

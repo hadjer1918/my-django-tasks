@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Modern Task Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+    <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="glass sticky top-0 z-50 px-6 py-4 flex justify-between items-center mb-10">
+        <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 p-2 rounded-lg text-white font-bold text-xl">TF</div>
+            <span class="font-bold text-xl tracking-tight text-slate-800">TaskFlow</span>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="flex items-center gap-4">
+            <!-- Improved User Display -->
+            <div class="flex flex-col items-end">
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Member</span>
+                <span class="text-sm font-bold text-indigo-600">{{ user.username }}</span>
+            </div>
+            <form action="{% url 'logout' %}" method="post" class="ml-2">
+                {% csrf_token %}
+                <button type="submit"
+                    class="bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold transition-all">
+                    Sign Out
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-3xl">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+
+</html>
