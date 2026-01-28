@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect,get_object_or_404 # Add redirect h
 from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm # Import your new form
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 @login_required
 def task_list(request):
     if request.method == "POST":
@@ -28,3 +30,8 @@ def delete_task(request, pk):
     task = get_object_or_404(Task,pk=pk,user=request.user)
     task.delete()
     return redirect('task_list')
+def create_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "admin123")
+        return HttpResponse("Admin created! User: admin, Pass: admin123")
+    return HttpResponse("Admin already exists.")
