@@ -1,5 +1,5 @@
-django
+Django>=5.0
 gunicorn
-whitenoise
+whitenoise[brotli]
 asgiref
 sqlparse

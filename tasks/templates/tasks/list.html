@@ -1,75 +1,231 @@
 {% extends 'tasks/base.html' %}
 
 {% block content %}
-<!-- Header Section -->
-<div class="mb-8 flex justify-between items-end">
-    <div>
-        <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">My Workspace</h1>
-        <p class="text-slate-500 mt-2 font-medium">Manage your daily focus and productivity.</p>
+<!-- Tactical Dashboard Header -->
+<div class="mb-10">
+    <div class="flex justify-between items-end mb-4">
+        <div>
+            <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase italic">System
+                Status</h1>
+            <div class="flex items-center gap-2 mt-1">
+                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">
+                    {% if progress == 100 %}
+                    Optimization Complete
+                    {% else %}
+                    Neural Synchronization: {{ progress }}%
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="text-right">
+            <span class="text-4xl font-black text-indigo-600 dark:text-indigo-400">{{ count }}</span>
+            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">Pending Tasks</p>
+        </div>
     </div>
-    <div class="text-right">
-        <span class="text-3xl font-black text-indigo-600">{{ count }}</span>
-        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Tasks Left</p>
+    <!-- Tactical Progress Bar -->
+    <div class="relative h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div id="tactical-progress" data-progress="{{ progress }}"
+            class="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-400 transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(99,102,241,0.6)]"
+            style="width: 0%;"></div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bar = document.getElementById('tactical-progress');
+            if (bar) bar.style.width = bar.dataset.progress + '%';
+        });
+    </script>
 </div>
 
-<!-- Add Task Form -->
-<div class="glass p-1 rounded-2xl shadow-xl mb-10 overflow-hidden">
-    <form method="POST" class="flex items-center">
-        {% csrf_token %}
-        <input type="text" name="title"
-            class="w-full bg-transparent border-none px-6 py-4 focus:ring-0 text-lg outline-none"
-            placeholder="What's your next priority?" required>
-        <button type="submit"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:scale-105 mr-2">
-            Add
-        </button>
-    </form>
-</div>
+<!-- Mission Control (Refined Visibility) -->
+<div class="relative mb-12">
+    <!-- Outer Glow Effect -->
+    <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-20"></div>
 
-<!-- Task List -->
-<div class="space-y-4">
-    {% for task in tasks %}
-    <div class="flex flex-col">
-        <span
-            class="text-lg font-medium {% if task.completed %}text-slate-400 line-through{% else %}text-slate-700{% endif %}">
-            {{ task.title }}
-        </span>
-        {% if task.due_date %}
-        <span
-            class="text-[10px] font-bold uppercase tracking-wider {% if task.completed %}text-slate-300{% else %}text-indigo-400{% endif %}">
-            Due: {{ task.due_date|date:"M d, Y" }}
-        </span>
-        {% endif %}
+    <!-- Replace your current <style> and Mission Control <div> with this -->
+    <!-- Replace your current <style> and Mission Control <div> with this -->
+    <style>
+        /* Force the tactical look on Django's form widgets */
+        .mission-control-inputs select,
+        .mission-control-inputs input {
+            background-color: transparent !important;
+            border: none !important;
+            padding: 4px 8px !important;
+            width: auto !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            font-weight: 700;
+            appearance: none;
+            /* Removes default arrow */
+        }
+
+        /* Fix for dropdown options visibility in Light Mode */
+        .mission-control-inputs select option {
+            background-color: white !important;
+            color: #1e293b !important;
+            /* slate-800 */
+        }
+
+        /* Dark mode override for dropdown options */
+        .dark .mission-control-inputs select option {
+            background-color: #1e293b !important;
+            color: white !important;
+        }
+    </style>
+
+    <div class="relative mb-12">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-20">
+        </div>
+
+        <div
+            class="relative glass bg-white dark:bg-[#0f172a]/80 rounded-2xl border border-slate-200 dark:border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row mission-control-inputs">
+            <!-- Vertical Sidebar HUD -->
+            <div
+                class="w-full md:w-20 flex md:flex-col items-center justify-center py-4 border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02]">
+                <div class="p-2 rounded-full border-2 border-indigo-500/50 text-indigo-600 dark:text-indigo-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </div>
+            </div>
+
+            <form method="POST" class="flex-1 p-8">
+                {% csrf_token %}
+
+                <!-- Objective Input -->
+                <div class="mb-8">
+                    <input type="text" name="title"
+                        class="w-full bg-transparent border-none p-0 focus:ring-0 outline-none text-2xl font-black text-slate-800 dark:text-white placeholder:text-slate-300 tracking-tighter"
+                        placeholder="ENTER MISSION OBJECTIVE..." required>
+                </div>
+
+                <!-- Metadata Controls -->
+                <div class="flex flex-wrap items-end gap-10">
+                    <!-- Deadline -->
+                    <div class="flex flex-col transition-all">
+                        <span
+                            class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-1">Deadline</span>
+                        <div class="text-slate-700 dark:text-slate-300">
+                            {{ form.due_date }}
+                        </div>
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="flex flex-col transition-all">
+                        <span
+                            class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-1">Priority
+                            Status</span>
+                        <div class="text-slate-700 dark:text-slate-300">
+                            {{ form.priority }}
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="flex flex-col transition-all">
+                        <span
+                            class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-1">Objective
+                            Sector</span>
+                        <div class="text-slate-700 dark:text-slate-300">
+                            {{ form.category }}
+                        </div>
+                    </div>
+
+                    <!-- Execute Button -->
+                    <div class="ml-auto pt-4 md:pt-0">
+                        <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-3 rounded-xl font-black uppercase text-[10px] tracking-[0.3em] transition-all transform hover:scale-[1.05] shadow-lg active:scale-95">
+                            Execute
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        {% if not task.completed %}
-        <a href="{% url 'complete_task' task.id %}"
-            class="p-2 hover:bg-emerald-50 text-emerald-500 rounded-lg transition-colors">
-            Done
-        </a>
-        {% endif %}
-        <a href="{% url 'delete_task' task.id %}" class="p-2 hover:bg-red-50 text-red-400 rounded-lg transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-        </a>
+    <!-- Tactical Task Readout -->
+    <!-- Tactical Task Readout -->
+    <div class="space-y-4">
+        {% for task in tasks %}
+        <!-- Added 'bg-white shadow-sm' for light mode and 'dark:bg-slate-800/40' for dark mode -->
+        <div
+            class="group relative flex justify-between items-center p-5 bg-white dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-indigo-500 shadow-sm hover:shadow-md transition-all duration-300">
+
+            <!-- Priority Indicator Bar -->
+            <div class="absolute left-0 top-1/4 bottom-1/4 w-1.5 rounded-r-full
+            {% if task.priority == '3' %}
+                bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]
+            {% elif task.priority == '2' %}
+                bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]
+            {% else %}
+                bg-slate-300 dark:bg-slate-600
+            {% endif %}">
+            </div>
+
+            <div class="flex items-center gap-5 ml-3">
+                <!-- Tactical Toggle (Complete Button) -->
+                <a href="{% url 'complete_task' task.id %}" class="flex items-center justify-center w-6 h-6 rounded-lg border-2 transition-all 
+                {% if task.completed %}
+                    bg-emerald-500 border-emerald-500
+                {% else %}
+                    border-slate-300 dark:border-slate-600 hover:border-indigo-500 bg-transparent
+                {% endif %}">
+                    {% if task.completed %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    {% endif %}
+                </a>
+
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-3">
+                        <!-- Text color adjusted for high visibility in both modes -->
+                        <span
+                            class="text-lg font-bold tracking-tight transition-colors 
+                        {% if task.completed %}text-slate-400 line-through{% else %}text-slate-900 dark:text-slate-100{% endif %}">
+                            {{ task.title }}
+                        </span>
+
+                        <span
+                            class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400">
+                            {{ task.get_category_display }}
+                        </span>
+                    </div>
+
+                    {% if task.due_date %}
+                    <span class="text-[10px] font-bold uppercase tracking-[0.1em] mt-1
+                    {% if task.completed %}
+                        text-slate-400/50
+                    {% else %}
+                        text-indigo-600 dark:text-indigo-400
+                    {% endif %}">
+                        DUE: {{ task.due_date|date:"M d, Y" }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                <a href="{% url 'delete_task' task.id %}"
+                    class="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded-xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <!-- If tasks are not visualizing, this message will show -->
+        <div class="text-center py-20 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-3xl">
+            <p class="text-slate-400 font-bold uppercase tracking-widest">No Missions Logged</p>
+        </div>
+        {% endfor %}
     </div>
-</div>
-{% empty %}
-<div class="text-center py-20">
-    <div class="text-slate-300 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
-    </div>
-    <p class="text-slate-400 font-medium italic">Your workspace is clean. Take a break!</p>
-</div>
-{% endfor %}
-</div>
-{% endblock %}
+    {% endblock %}
